@@ -15,19 +15,34 @@ export default function AdvancedCounter() {
 
     // Effect #2: auto-save
     useEffect(() => {
-        console.log('Auto-save effect started for count:', count);
-
         // Returns an ID we can use to clear the timeout
         const timerId = setTimeout(() => {
             localStorage.setItem('advancedCounterCount', String(count));
-            console.log('Saved to localStorage:', count);
         }, 500); // Save after 5 seconds of inactivity
 
         return () => {
-            console.log('Cleanup: cancelling timer for', count);
             clearTimeout(timerId);
         };
     }, [count]); // re-run whenever count changes
+
+    // Effect #3: keyboard listeners
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowUp') {
+                setCount((prev) => prev + 1);
+            } else if (event.key === 'ArrowDown') {
+                setCount((prev) => prev - 1);
+            }
+        };
+
+        // Tell the document to listen
+        document.addEventListener('keydown', handleKeyDown);
+
+        // CLEANUP
+        return() => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []); 
 
 	// Function to increment the count
 	const handleIncrement = () => {
@@ -49,6 +64,7 @@ export default function AdvancedCounter() {
 
             {/* Display the history of counts */}
             <p>Previous counts: {history.join(', ')}</p>
+            <p><em>Tip: Use Up/Down arrow keys to increment/decrement</em></p>
 		</div>
 	);
 }
