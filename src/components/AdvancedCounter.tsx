@@ -54,6 +54,12 @@ export default function AdvancedCounter() {
 		setCount((prev) => prev - 1);
 	};
 
+    // Reset: clear history AND set count to 0
+    const handleReset = () => {
+        setHistory([]); 
+        setCount(0);
+    };
+
 	return (
 		<div>
 			<h1>Advanced Counter</h1>
@@ -61,6 +67,7 @@ export default function AdvancedCounter() {
 			<p>Current Count: {count}</p>
 			<button onClick={handleIncrement}>Increment (+1)</button>
 			<button onClick={handleDecrement}>Decrement (-1)</button>
+            <button onClick={handleReset}>Reset</button>
 
             {/* Display the history of counts */}
             <p>Previous counts: {history.join(', ')}</p>
