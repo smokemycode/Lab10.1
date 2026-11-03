@@ -19,7 +19,6 @@ export default function AdvancedCounter() {
         const timerId = setTimeout(() => {
             localStorage.setItem('advancedCounterCount', String(count));
         }, 500); // Save after 5 seconds of inactivity
-
         return () => {
             clearTimeout(timerId);
         };
@@ -72,6 +71,7 @@ export default function AdvancedCounter() {
         }
     };
 
+    // RENDER
 	return (
 		<div>
 			<h1>Advanced Counter</h1>
