@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 
 // AdvancedCounter component that displays a counter with increment and decrement buttons
 export default function AdvancedCounter() {
-	// State to hold the current count
-	const [count, setCount] = useState(0);
-    // State to hold the history of counts
-    const [history, setHistory] = useState<number[]>([]);
+	const [count, setCount] = useState(0); // State to hold the current count
+    const [history, setHistory] = useState<number[]>([]); // State to hold the history of counts
+    const [step, setStep] = useState(1); // the numeric step used by + / -
+    const [stepText, setStepText] = useState('1'); // the text input for the step
 
     // Effect #1: record history
     useEffect(() => {
@@ -29,9 +29,9 @@ export default function AdvancedCounter() {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'ArrowUp') {
-                setCount((prev) => prev + 1);
+                setCount((prev) => prev + step);
             } else if (event.key === 'ArrowDown') {
-                setCount((prev) => prev - 1);
+                setCount((prev) => prev - step);
             }
         };
 
@@ -42,22 +42,34 @@ export default function AdvancedCounter() {
         return() => {
             document.removeEventListener('keydown', handleKeyDown);
         };
-    }, []); 
+    }, [step]); // re-run whenever step changes
 
 	// Function to increment the count
 	const handleIncrement = () => {
-		setCount((prev) => prev + 1);
+		setCount((prev) => prev + step);
 	};
 
 	// Function to decrement the count
 	const handleDecrement = () => {
-		setCount((prev) => prev - 1);
+		setCount((prev) => prev - step);
 	};
 
     // Reset: clear history AND set count to 0
     const handleReset = () => {
         setHistory([]); 
         setCount(0);
+    };
+
+    // When the user types in the step box
+    const handleStepChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const text = e.target.value;
+        setStepText(text); 
+
+        const parsed = Number(text);
+        // Only update 'step' if it's a real number and > 0.
+        if (!Number.isNaN(parsed) && parsed > 0) {
+            setStep(parsed);
+        }
     };
 
 	return (
@@ -68,6 +80,12 @@ export default function AdvancedCounter() {
 			<button onClick={handleIncrement}>Increment (+1)</button>
 			<button onClick={handleDecrement}>Decrement (-1)</button>
             <button onClick={handleReset}>Reset</button>
+
+            <div> 
+                <label>
+                    Step: <input value={stepText} onChange={handleStepChange} type="number" min="1" />
+                </label>
+            </div>
 
             {/* Display the history of counts */}
             <p>Previous counts: {history.join(', ')}</p>
