@@ -1,32 +1,40 @@
-# React + TypeScript + Vite
+# Advanced React Counter
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A simple counter app built with React + TypeScript that practices `useState` and `useEffect`.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Count display** – starts at 0
+- **Increment / Decrement** buttons
+- **History** – shows every count value as it changes
+- **Auto-save** – saves the count to `localStorage` after 500ms (with cleanup so rapid clicks don't spam saves)
+- **Keyboard shortcuts** – `ArrowUp` to increment, `ArrowDown` to decrement
+- **Reset** – sets count back to 0 and clears history
+- **Custom step** – type a number to change how much +/− adds or subtracts
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
+Open the URL shown in the terminal (usually http://localhost:5173).
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Project Structure
+```
+src/
+├── App.tsx                      # Renders the counter
+└── components/
+    └── AdvancedCounter.tsx      # All counter logic lives here
+```
+
+## How it Works
+- `useState` holds the count, history, and step.
+- `useEffect` #1 records the new count into history whenever `count` changes.
+- `useEffect` #2 saves the count to `localStorage` — its cleanup cancels the previous timer so only the latest value is saved.
+- `useEffect` #3 adds keyboard listeners on mount and removes them on unmount (or when step changes).
+
+## Tech
+- React 18
+- TypeScript
+- Vite
